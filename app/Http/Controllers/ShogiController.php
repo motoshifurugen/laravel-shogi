@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\GameRecord;
 
 class ShogiController extends Controller
 {
@@ -11,6 +12,15 @@ class ShogiController extends Controller
         if ($request->isMethod('post')) {
             // POSTでのアクセス時の処理
             $MyKing = $request->input('move');
+            $data = new GameRecord;
+            $data->turn = 0;
+            $data->piece = 0;
+            $data->square = $MyKing;
+            if ($data->save()) {
+                var_dump('保存しました。');
+            } else {
+                var_dump('保存に失敗しました。');
+            }
         } else {
             // GETでのアクセス時の処理
             $MyKing = '59';
