@@ -1,0 +1,31 @@
+.board {
+    margin: 0 200px;
+}
+
+.row {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    border: solid 1px black;
+    width: 60px;
+}
+
+.column {
+    width: 500px;
+    display: table;
+    table-layout: fixed;
+    height: 60px;
+}
+
+.selected {
+    background-color: yellow;
+}
+
+.way {
+    background-color: red;
+}
+
+.piece {
+    font-size: 30px;
+    font-weight: bold;
+}

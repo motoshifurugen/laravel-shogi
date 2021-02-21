@@ -16,3 +16,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('shogi', 'App\Http\Controllers\ShogiController@index');
+
+Route::get('shogi/select/{piece}', 'App\Http\Controllers\ShogiController@select');
+
+Route::post('shogi', 'App\Http\Controllers\ShogiController@index');
