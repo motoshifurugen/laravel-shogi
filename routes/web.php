@@ -23,3 +23,5 @@ Route::get('shogi', 'App\Http\Controllers\ShogiController@index');
 Route::get('shogi/select/{piece}', 'App\Http\Controllers\ShogiController@select');
 
 Route::post('shogi', 'App\Http\Controllers\ShogiController@index');
+
+Route::get('shogi/reset', 'App\Http\Controllers\ShogiController@reset');

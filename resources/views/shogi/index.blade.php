@@ -21,5 +21,8 @@
         }
         ?>
     </div>
+    <div>
+        <p class="delete"><a href="shogi/reset">データを削除</a></p>
+    </div>
 </body>
 </html>

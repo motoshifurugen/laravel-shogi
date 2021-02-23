@@ -17,12 +17,20 @@ class ShogiController extends Controller
             $data->piece = 0;
             $data->square = $MyKing;
             if ($data->save()) {
+                $bKing = GameRecord::query();
+                // $bKing->whereColumn(['turn', 0], ['piece', 0]);
+                if ($bKing->orderBy('id', 'desc')->first()) {
+                    echo $bKing->first();
+                }
                 var_dump('保存しました。');
             } else {
                 var_dump('保存に失敗しました。');
             }
         } else {
             // GETでのアクセス時の処理
+            $bKing = GameRecord::query();
+            // $bKing->whereColumn(['turn', 0], ['piece', 0]);
+            echo $bKing->orderBy('id', 'desc')->first();
             $MyKing = '59';
         }
         return view('shogi/index', compact('MyKing'));
@@ -47,5 +55,14 @@ class ShogiController extends Controller
         $way = array_unique($ways);
         // 移動可能マスを $way という配列に入れてselectページに渡す
         return view('shogi/select', compact('MyKing', 'way'));
+    }
+
+    public function reset()
+    {
+        if (GameRecord::query()->delete()) {
+            echo '削除しました。';
+        } else {
+            echo '削除に失敗しました。';
+        }
     }
 }
