@@ -11,50 +11,55 @@ class ShogiController extends Controller
     {
         if ($request->isMethod('post')) {
             // POSTでのアクセス時の処理
-            $MyKing = $request->input('move');
             $data = new GameRecord;
-            $data->turn = 0;
-            $data->piece = 0;
-            $data->square = $MyKing;
-            if ($data->save()) {
-                $bKing = GameRecord::query();
-                // $bKing->whereColumn(['turn', 0], ['piece', 0]);
-                if ($bKing->orderBy('id', 'desc')->first()) {
-                    echo $bKing->first();
-                }
-                var_dump('保存しました。');
-            } else {
-                var_dump('保存に失敗しました。');
-            }
-        } else {
-            // GETでのアクセス時の処理
-            $bKing = GameRecord::query();
-            // $bKing->whereColumn(['turn', 0], ['piece', 0]);
-            echo $bKing->orderBy('id', 'desc')->first();
-            $MyKing = '59';
+            $data->turn = $request->input('turn'); // 手番
+            $data->piece = 0; // 王将
+            $data->square = $request->input('move'); // 移動先マス
+            $data->save();
         }
-        return view('shogi/index', compact('MyKing'));
+        // 先手番の最新手を取得
+        $bLast = GameRecord::where('turn', 0)->orderBy('id', 'desc')->first();
+        $bKing = (!empty($bLast['square'])) ? $bLast : config('const.start.bKing');
+        // 後手番の最新手を取得
+        $wLast = GameRecord::where('turn', 1)->orderBy('id', 'desc')->first();
+        $wKing = (!empty($wLast['square'])) ? $wLast : config('const.start.wKing');
+        return view('shogi/index', compact('bKing', 'wKing'));
     }
 
     public function select($piece)
     {
-        // $pieceには King:5:9 のように駒名、列、行が「:」でくっついた形が入る。
+        $gameRecord = GameRecord::query()->orderBy('id', 'desc');
+        // $pieceには 0:0:5:9 のように手番、駒番、列、行が「:」でくっついた形が入る。
+        $king = array();
         $select = explode(":", $piece);
-        $pieceName = $select[0];
-        $row = $select[1];
-        $column = $select[2];
-        $MyKing = $row . $column;
+        $king = array(
+            'turn' => $select[0],
+            'piece' => $select[1],
+            'square' => $select[2] . $select[3],
+        );
+        // 移動可能マス配列としてselectページに渡す
         $ways = array();
         // 王将の移動可能マスを割り出して、$waysに追加する。
-        for ($c = $column-1; $c < $column+2 ; $c++) {
-            for ($r = $row-1; $r < $row+2 ; $r++) {
+        for ($c = $select[3]-1; $c < $select[3]+2 ; $c++) {
+            for ($r = $select[2]-1; $r < $select[2]+2 ; $r++) {
                 $ways[] = $r . $c;
             }
         }
-        // 重複削除
         $way = array_unique($ways);
-        // 移動可能マスを $way という配列に入れてselectページに渡す
-        return view('shogi/select', compact('MyKing', 'way'));
+        if ($select[0] == 0) {
+            // 先手番の処理
+            $bKing = $king;
+            $wLast = GameRecord::where('turn', 1)->orderBy('id', 'desc')->first();
+            $wKing = (!empty($wLast['square'])) ? $wLast : config('const.start.wKing');
+            $turn = 0;
+        } elseif ($select[0] == 1) {
+            // 後手番の処理
+            $wKing = $king;
+            $bLast = GameRecord::where('turn', 0)->orderBy('id', 'desc')->first();
+            $bKing = (!empty($bLast['square'])) ? $bLast : config('const.start.bKing');
+            $turn= 1;
+        }
+        return view('shogi/select', compact('bKing', 'wKing', 'way', 'turn'));
     }
 
     public function reset()
@@ -64,5 +69,6 @@ class ShogiController extends Controller
         } else {
             echo '削除に失敗しました。';
         }
+        return redirect('shogi');
     }
 }

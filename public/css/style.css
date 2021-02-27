@@ -29,3 +29,7 @@
     font-size: 30px;
     font-weight: bold;
 }
+
+.turnw {
+    transform:rotate(180deg);
+}
