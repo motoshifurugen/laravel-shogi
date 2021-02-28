@@ -12,8 +12,10 @@
             for ($r = 9; $r > 0; $r--) {
                 $square = $r . $c;
                 if ($square == $bKing['square']) {
+                    // 王将
                     echo '<p class="piece row turnb square' . $square . '" id="square' . $square . '"><a style="text-decoration:none" href="' . action('App\Http\Controllers\ShogiController@select', $bKing['turn'] .  ':' . $bKing['piece'] . ':' . $r . ':' . $c) . '">王</a></p>';
                 } elseif ($square == $wKing['square']) {
+                    // 玉将
                     echo '<p class="piece row turnw square' . $square . '" id="square' . $square . '"><a style="text-decoration:none" href="' . action('App\Http\Controllers\ShogiController@select', $wKing['turn'] .  ':' . $wKing['piece'] . ':' . $r . ':' . $c) . '">玉</a></p>';
                 } else {
                     echo '<p class="row square' . $square . '" id="square' . $square . '">' . $square . '</p>';

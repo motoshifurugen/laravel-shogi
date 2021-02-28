@@ -15,9 +15,10 @@
                 for ($r = 9; $r > 0; $r--) {
                     $square = $r . $c;
                     if ($square == $bKing['square']) {
-                        // 駒マス
+                        // 駒マス「王将」
                         echo '<p class="piece row turnb square' . $square . ' selected" id="square' . $square . '">王</p>';
                     } elseif ($square == $wKing['square']) {
+                        // 駒マス「玉将」
                         echo '<p class="piece turnw row square' . $square . ' selected" id="square' . $square . '">玉</p>';
                     } elseif (in_array($square, $way)) {
                         // 移動可能マス 送信されるデータはここにしかない

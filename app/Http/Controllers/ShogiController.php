@@ -28,7 +28,6 @@ class ShogiController extends Controller
 
     public function select($piece)
     {
-        $gameRecord = GameRecord::query()->orderBy('id', 'desc');
         // $pieceには 0:0:5:9 のように手番、駒番、列、行が「:」でくっついた形が入る。
         $king = array();
         $select = explode(":", $piece);
