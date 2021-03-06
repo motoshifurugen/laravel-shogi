@@ -33,3 +33,7 @@
 .turnw {
     transform:rotate(180deg);
 }
+
+.disabled a {
+    pointer-events: none;
+}

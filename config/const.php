@@ -1,6 +1,6 @@
 <?php
 
-return [
+$start = [
     'start' => [
         'bKing' => [
             'turn' => 0,
@@ -14,5 +14,20 @@ return [
         ],
     ]
 ];
+
+for ($i=1; $i<10; $i++) {
+    $start['start']['bPawn'][$i] = [
+        'turn' => 0,
+        'piece' => $i,
+        'square' => $i . 7
+    ];
+    $start['start']['wPawn'][$i] = [
+        'turn' => 1,
+        'piece' => $i,
+        'square' => $i . 3
+    ];
+}
+
+return $start;
 
 
