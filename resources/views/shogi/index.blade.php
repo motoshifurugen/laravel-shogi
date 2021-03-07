@@ -17,6 +17,10 @@
                 } elseif ($square == $wKing['square']) {
                     // 玉将
                     echo '<p class="piece row turnw square' . $square . ' ' . $nextTurn['white'] . '" id="square' . $square . '"><a style="text-decoration:none" href="' . action('App\Http\Controllers\ShogiController@select', $wKing['turn'] .  ':' . $wKing['piece'] . ':' . $r . ':' . $c) . '">玉</a></p>';
+                } elseif ($square == $bPawn[0][$r]['square']) {
+                    echo '<p class="piece row turnb square' . $square . ' ' . $nextTurn['black'] . '" id="square' . $square . '"><a style="text-decoration:none" href="' . action('App\Http\Controllers\ShogiController@select', $bPawn[0][$r]['turn'] .  ':' . $bPawn[0][$r]['piece'] . ':' . $r . ':' . $c) . '">歩</a></p>';
+                } elseif ($square == $wPawn[1][$r]['square']) {
+                    echo '<p class="piece row turnw square' . $square . ' ' . $nextTurn['white'] . '" id="square' . $square . '"><a style="text-decoration:none" href="' . action('App\Http\Controllers\ShogiController@select', $wPawn[1][$r]['turn'] .  ':' . $wPawn[1][$r]['piece'] . ':' . $r . ':' . $c) . '">歩</a></p>';
                 } else {
                     echo '<p class="row square' . $square . '" id="square' . $square . '">' . $square . '</p>';
                 }
