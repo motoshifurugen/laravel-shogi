@@ -17,6 +17,21 @@ class ShogiController extends Controller
                 $data->piece = $request->input('piece'); // 駒
                 $data->square = $request->input('move'); // 移動先マス
                 $data->save();
+            } elseif (!empty($request->input('take'))) {
+                // 取られた駒の保存処理
+                $takenData = new GameRecord;
+                $turn = ($request->input('turn') == '0') ? '1' : '0';
+                $takenData->turn = 100 + (int)$turn;
+                $takenPiece = GameRecord::where('turn', $turn)->where('square', $request->input('take'))->first();
+                $takenData->piece = $takenPiece['piece'];
+                $takenData->square = $request->input('take');
+                $takenData->save();
+                // 動く駒の保存処理
+                $data = new GameRecord;
+                $data->turn = $request->input('turn'); // 手番
+                $data->piece = $request->input('piece'); // 駒
+                $data->square = $request->input('take'); // 移動先マス
+                $data->save();
             }
         }
         // 先手番の最新手を取得
@@ -91,6 +106,7 @@ class ShogiController extends Controller
         } else {
             echo '削除に失敗しました。';
         }
+        
         return redirect('shogi');
     }
 
@@ -120,6 +136,10 @@ class ShogiController extends Controller
         // 歩を取得
         $pawnArray = array();
         for ($i=1; $i<10; $i++) {
+            $takenPiece = GameRecord::where('turn', 100+(int)$turn)->where('piece', $i)->first();
+            if (!empty($takenPiece)) {
+                continue;
+            }
             $lastPawn = GameRecord::where('turn', $turn)->where('piece', $i)->orderBy('id', 'desc')->first();
             $pawn = (!empty($lastPawn['square'])) ? $lastPawn : config('const.start.' . $turn . '.' . $i);
             $pawnArray[$turn][$i] = $pawn;

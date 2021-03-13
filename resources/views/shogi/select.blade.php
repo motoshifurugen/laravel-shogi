@@ -35,14 +35,14 @@
                 for ($r = 9; $r > 0; $r--) {
                     $square = $r . $c;
                     if (in_array($square, $way)) {
-                        if (($selectPiece['turn'] == 0) && ($square == $wPawn[1][$r]['square'])) {
+                        if (($selectPiece['turn'] == 0) && !empty($wPawn[1][$r]) &&($square == $wPawn[1][$r]['square'])) {
                             // 後手の歩をとる
                             echo '<input type="hidden" value="' . $square . '" name="square" id="data' . $square . '"></input>';
                             echo '<input type="hidden" value="' . $selectPiece['turn'] . '" name="turn"></input>';
                             echo '<input type="hidden" value="' . $selectPiece['piece'] . '" name="piece"></input>';
                             echo '<input type="hidden" value="' . $wPawn[1][$r]['piece'] . '" name="piece"></input>';
                             echo '<p class="row square' . $square . ' way" id="square' . $square . '"><input type="button" value="go" onclick="takePiece(' . $square . ')"/></p>';
-                        } elseif (($selectPiece['turn'] == 1) && ($square == $bPawn[0][$r]['square'])) {
+                        } elseif (($selectPiece['turn'] == 1) && !empty($bPawn[0][$r]) && ($square == $bPawn[0][$r]['square'])) {
                             // 先手の歩をとる
                             echo '<input type="hidden" value="' . $square . '" name="square" id="data' . $square . '"></input>';
                             echo '<input type="hidden" value="' . $selectPiece['turn'] . '" name="turn"></input>';
@@ -62,10 +62,10 @@
                     } elseif ($square == $wKing['square']) {
                         // 駒マス「玉将」
                         echo '<p class="piece turnw row square' . $square . ' ' . $wPiece[$wKing['piece']] . '" id="square' . $square . '">玉</p>';
-                    } elseif ($square == $bPawn[0][$r]['square']) {
+                    } elseif (!empty($bPawn[0][$r]) && ($square == $bPawn[0][$r]['square'])) {
                         // 駒マス「歩」（先手）
                         echo '<p class="piece row turnb square' . $square . ' ' . $bPiece[$bPawn[0][$r]['piece']] . '" id="square' . $square . '">歩</p>';
-                    } elseif ($square == $wPawn[1][$r]['square']) {
+                    } elseif (!empty($wPawn[1][$r]) && ($square == $wPawn[1][$r]['square'])) {
                         // 駒マス「歩」（後手）
                         echo '<p class="piece row turnw square' . $square . ' ' . $wPiece[$wPawn[1][$r]['piece']] . '" id="square' . $square . '">歩</p>';
                     } else {
