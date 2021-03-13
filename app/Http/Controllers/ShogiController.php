@@ -11,11 +11,13 @@ class ShogiController extends Controller
     {
         if ($request->isMethod('post')) {
             // POSTでのアクセス時の処理
-            $data = new GameRecord;
-            $data->turn = $request->input('turn'); // 手番
-            $data->piece = $request->input('piece'); // 駒
-            $data->square = $request->input('move'); // 移動先マス
-            $data->save();
+            if (!empty($request->input('move'))) {
+                $data = new GameRecord;
+                $data->turn = $request->input('turn'); // 手番
+                $data->piece = $request->input('piece'); // 駒
+                $data->square = $request->input('move'); // 移動先マス
+                $data->save();
+            }
         }
         // 先手番の最新手を取得
         $bKing = $this->getLastRecord(0, 0);
@@ -37,23 +39,6 @@ class ShogiController extends Controller
             'piece' => $select[1], // 0 => 王, 1~9 => 歩
             'square' => $select[2] . $select[3],
         );
-        // 移動可能マス配列としてselectページに渡す
-        $ways = array();
-        // 王将の移動可能マスを割り出して、$waysに追加する。
-        if ((int)$selectPiece['piece'] == 0) {
-            for ($c = $select[3]-1; $c < $select[3]+2 ; $c++) {
-                for ($r = $select[2]-1; $r < $select[2]+2 ; $r++) {
-                    $ways[] = $r . $c;
-                }
-            }
-        } elseif ((int)$selectPiece['piece'] >= 1 && (int)$selectPiece['piece'] <= 9) {
-            if ($selectPiece['turn'] == 0) {
-                $ways[] = $select[2] . ((int)$select[3])-1;
-            } elseif ($selectPiece['turn'] == 1) {
-                $ways[] = $select[2] . ((int)$select[3])+1;
-            }
-        }
-        $way = array_unique($ways);
         if ($select[0] == 0) {
             // 先手番の処理
             $bKing = $this->getLastRecord(0, 0, $selectPiece);
@@ -67,6 +52,35 @@ class ShogiController extends Controller
             $bPawn = $this->getPawn(0);
             $wPawn = $this->getPawn(1);
         }
+        // 移動可能マス配列としてselectページに渡す
+        $ways = array();
+        // 王将の移動可能マスを割り出して、$waysに追加する。
+        if ((int)$selectPiece['piece'] == 0) {
+            for ($c = $select[3]-1; $c < $select[3]+2 ; $c++) {
+                for ($r = $select[2]-1; $r < $select[2]+2 ; $r++) {
+                    // 移動不可能マスはスキップする
+                    if ($selectPiece['square'] == $r . $c) {
+                        continue;
+                    } elseif ($select[0] == 0) {
+                        if ($r . $c == $bKing['square'] || $r . $c == $bPawn[0][$r]['square']) {
+                            continue;
+                        }
+                    } elseif ($select[0] == 1) {
+                        if ($r . $c == $wKing['square'] || $r . $c == $wPawn[1][$r]['square']) {
+                            continue;
+                        }
+                    }
+                    $ways[] = $r . $c;
+                }
+            }
+        } elseif ((int)$selectPiece['piece'] >= 1 && (int)$selectPiece['piece'] <= 9) {
+            if ($selectPiece['turn'] == 0) {
+                $ways[] = $select[2] . ((int)$select[3])-1;
+            } elseif ($selectPiece['turn'] == 1) {
+                $ways[] = $select[2] . ((int)$select[3])+1;
+            }
+        }
+        $way = array_unique($ways);
         return view('shogi/select', compact('bKing', 'wKing', 'way', 'bPawn', 'wPawn', 'selectPiece'));
     }
 
