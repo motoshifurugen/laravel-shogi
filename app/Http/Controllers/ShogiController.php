@@ -32,6 +32,11 @@ class ShogiController extends Controller
                 $data->piece = $request->input('piece'); // 駒
                 $data->square = $request->input('take'); // 移動先マス
                 $data->save();
+                // 王（玉）が取られた時はゲーム終了
+                if ($takenData['piece'] == 0) {
+                    $win = ($turn == '1') ? '先手' : '後手';
+                    return view('shogi/result', compact('win'));
+                }
             }
         }
         // 先手番の最新手を取得
@@ -77,12 +82,16 @@ class ShogiController extends Controller
                     if ($selectPiece['square'] == $r . $c) {
                         continue;
                     } elseif ($select[0] == 0) {
-                        if ($r . $c == $bKing['square'] || $r . $c == $bPawn[0][$r]['square']) {
-                            continue;
+                        if (isset($bPawn[0][$r]['square'])) {
+                            if ($r . $c == $bKing['square'] || $r . $c == $bPawn[0][$r]['square']) {
+                                continue;
+                            }
                         }
                     } elseif ($select[0] == 1) {
-                        if ($r . $c == $wKing['square'] || $r . $c == $wPawn[1][$r]['square']) {
-                            continue;
+                        if (isset($wPawn[1][$r]['square'])) {
+                            if ($r . $c == $wKing['square'] || $r . $c == $wPawn[1][$r]['square']) {
+                                continue;
+                            }
                         }
                     }
                     $ways[] = $r . $c;
@@ -106,7 +115,7 @@ class ShogiController extends Controller
         } else {
             echo '削除に失敗しました。';
         }
-        
+
         return redirect('shogi');
     }
 

@@ -49,6 +49,20 @@
                             echo '<input type="hidden" value="' . $selectPiece['piece'] . '" name="piece"></input>';
                             echo '<input type="hidden" value="' . $wPawn[1][$r]['piece'] . '" name="piece"></input>';
                             echo '<p class="row square' . $square . ' way" id="square' . $square . '"><input type="button" value="go" onclick="takePiece(' . $square . ')"/></p>';
+                        } elseif (($selectPiece['turn'] == 0) && ($square == $wKing['square'])) {
+                            // 玉を取る
+                            echo '<input type="hidden" value="' . $square . '" name="square" id="data' . $square . '"></input>';
+                            echo '<input type="hidden" value="' . $selectPiece['turn'] . '" name="turn"></input>';
+                            echo '<input type="hidden" value="' . $selectPiece['piece'] . '" name="piece"></input>';
+                            echo '<input type="hidden" value="' . $wKing['piece'] . '" name="piece"></input>';
+                            echo '<p class="row square' . $square . ' way" id="square' . $square . '"><input type="button" value="go" onclick="takePiece(' . $square . ')"/></p>';
+                        } elseif (($selectPiece['turn'] == 1) && ($square == $bKing['square'])) {
+                            // 王を取る
+                            echo '<input type="hidden" value="' . $square . '" name="square" id="data' . $square . '"></input>';
+                            echo '<input type="hidden" value="' . $selectPiece['turn'] . '" name="turn"></input>';
+                            echo '<input type="hidden" value="' . $selectPiece['piece'] . '" name="piece"></input>';
+                            echo '<input type="hidden" value="' . $bKing['piece'] . '" name="piece"></input>';
+                            echo '<p class="row square' . $square . ' way" id="square' . $square . '"><input type="button" value="go" onclick="takePiece(' . $square . ')"/></p>';
                         } else {
                             // 移動可能マス
                             echo '<input type="hidden" value="' . $square . '" name="square" id="data' . $square . '"></input>';

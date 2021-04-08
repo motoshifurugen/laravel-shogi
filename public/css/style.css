@@ -37,3 +37,13 @@
 .disabled a {
     pointer-events: none;
 }
+
+.result {
+    width: 100%;
+    text-align: center;
+}
+
+.result p {
+    font-size: 24px;
+    font-weight: bold;
+}
