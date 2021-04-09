@@ -21,7 +21,7 @@ class ShogiController extends Controller
                 // 取られた駒の保存処理
                 $takenData = new GameRecord;
                 $turn = ($request->input('turn') == '0') ? '1' : '0';
-                $takenData->turn = 100 + (int)$turn;
+                $takenData->turn = 100 + $request->input('turn');
                 $takenPiece = GameRecord::where('turn', $turn)->where('square', $request->input('take'))->first();
                 $takenData->piece = $takenPiece['piece'];
                 $takenData->square = $request->input('take');
@@ -39,14 +39,18 @@ class ShogiController extends Controller
                 }
             }
         }
-        // 先手番の最新手を取得
+        $bPieceInHand = $wPieceInHand = null;
+        // 先手番の最新手と持ち駒を取得
         $bKing = $this->getLastRecord(0, 0);
         $bPawn = $this->getPawn(0);
+        $bPieceInHand = $this->getPieceInHand(0);
         // 後手番の最新手を取得
         $wKing = $this->getLastRecord(1, 0);
         $wPawn = $this->getPawn(1);
+        $wPieceInHand = $this->getPieceInHand(1);
+
         $nextTurn = $this->getNextTurn();
-        return view('shogi/index', compact('bKing', 'wKing', 'nextTurn', 'bPawn', 'wPawn'));
+        return view('shogi/index', compact('bKing', 'wKing', 'nextTurn', 'bPawn', 'wPawn', 'bPieceInHand', 'wPieceInHand'));
     }
 
     public function select($piece)
@@ -107,7 +111,9 @@ class ShogiController extends Controller
             }
         }
         $way = array_unique($ways);
-        return view('shogi/select', compact('bKing', 'wKing', 'way', 'bPawn', 'wPawn', 'selectPiece'));
+        $bPieceInHand = $this->getPieceInHand(0);
+        $wPieceInHand = $this->getPieceInHand(1);
+        return view('shogi/select', compact('bKing', 'wKing', 'way', 'bPawn', 'wPawn', 'selectPiece', 'bPieceInHand', 'wPieceInHand'));
     }
 
     public function reset()
@@ -169,5 +175,16 @@ class ShogiController extends Controller
         }
 
         return $record;
+    }
+
+    // 持ち駒取得
+    public function getPieceInHand($turn) {
+        $pieceInHand = array();
+        $handTurn = 100+(int)$turn;
+        $pieceInHandArray = GameRecord::where('turn', $handTurn)->get();
+        foreach ($pieceInHandArray as $piece) {
+            $pieceInHand[$piece['piece']] = '歩';
+        }
+        return $pieceInHand;
     }
 }

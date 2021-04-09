@@ -1,5 +1,10 @@
+.boardWrapper {
+    display: flex;
+}
+
 .board {
     margin: 0 200px;
+    position: static;
 }
 
 .row {
@@ -46,4 +51,22 @@
 .result p {
     font-size: 24px;
     font-weight: bold;
+}
+
+.b_hand, .w_hand {
+    font-size: 24px;
+    font-weight: bold;
+    position: relative;
+    border: solid 2px #CD853F;
+    padding: 10px 30px;
+    height: 80%;
+}
+
+.w_hand {
+    transform: rotate(180deg);
+    right: -160px;
+}
+
+.b_hand {
+    left: -160px;
 }

@@ -6,6 +6,12 @@
     <script type="text/javascript" src="{{ asset('js/shogi.js') }}"></script>
 </head>
 <body>
+    <div class="boardWrapper">
+    <div class="w_hand">
+        <?php foreach ($wPieceInHand as $wPiece) : ?>
+            <?php echo '<p class="w_piece">' . $wPiece . '</p>'; ?>
+        <?php endforeach; ?>
+    </div>
     <div class="board">
         <form action="/shogi" method="POST" name="moveform">
             {{ csrf_field() }}
@@ -91,6 +97,12 @@
             }
             ?>
         </form>
+    </div>
+    <div class="b_hand">
+        <?php foreach ($bPieceInHand as $bPiece) : ?>
+            <?php echo '<p class="b_piece">' . $bPiece . '</p>'; ?>
+        <?php endforeach; ?>
+    </div>
     </div>
 </body>
 </html>

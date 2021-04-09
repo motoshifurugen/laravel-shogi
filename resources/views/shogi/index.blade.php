@@ -5,6 +5,12 @@
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 </head>
 <body>
+    <div class="boardWrapper">
+    <div class="w_hand">
+        <?php foreach ($wPieceInHand as $wPiece) : ?>
+            <?php echo '<p class="w_piece">' . $wPiece . '</p>'; ?>
+        <?php endforeach; ?>
+    </div>
     <div class="board">
         <?php
         for ($c = 1; $c < 10; $c++) {
@@ -30,6 +36,12 @@
             echo '</div>';
         }
         ?>
+    </div>
+    <div class="b_hand">
+        <?php foreach ($bPieceInHand as $bPiece) : ?>
+            <?php echo '<p class="b_piece">' . $bPiece . '</p>'; ?>
+        <?php endforeach; ?>
+    </div>
     </div>
     <div>
         <?php echo '<p>次は' . $nextTurn['name'] . 'です。</p>'; ?>
