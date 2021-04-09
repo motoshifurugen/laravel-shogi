@@ -99,8 +99,10 @@ class ShogiController extends Controller
             }
         } elseif ((int)$selectPiece['piece'] >= 1 && (int)$selectPiece['piece'] <= 9) {
             if ($selectPiece['turn'] == 0) {
+                // 先手番の歩の移動可能マス取得
                 $ways[] = $select[2] . ((int)$select[3])-1;
             } elseif ($selectPiece['turn'] == 1) {
+                // 後手番の歩の移動可能マスを取得
                 $ways[] = $select[2] . ((int)$select[3])+1;
             }
         }

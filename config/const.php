@@ -20,11 +20,13 @@ $start = [
 ];
 
 for ($i=1; $i<10; $i++) {
+    // 先手の歩
     $start['start'][0][$i] = [
         'turn' => 0,
         'piece' => $i,
         'square' => $i . 7
     ];
+    // 後手の歩
     $start['start'][1][$i] = [
         'turn' => 1,
         'piece' => $i,
